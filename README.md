@@ -3,7 +3,7 @@
 Parcours des problématiques usuelles en sécurité applicative en suivant les guide CIA et OWASP...
 
 ## Cadre du module
-- [Définition du module 183 selon ICT](legal/183_3_Implémenter la sécurité d'une application.pdf)
+- [Définition du module 183 selon ICT](legal/183.pdf)
 - [Directive d'évaluation de prestations](legal/183-DEP.docx)
 
 ## Roadmap
