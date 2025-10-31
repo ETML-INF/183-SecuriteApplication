@@ -7,7 +7,7 @@
 - Educarte: hackers, intimité violée
 
 ## Théorie
-- [01-Owasp](../supports/01-Owasp.pptx)
+- [01-Owasp](../supports/01-Owasp.pdf) ([PPT](../supports/01-Owasp.pptx))
 
 ## Pratique
 - Top10
