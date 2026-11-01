@@ -29,3 +29,6 @@ Pour s’aider on peut utiliser:
 - un cookie
 
 D’ailleurs, express-jwt se base sur l’enête...
+
+## Vérifier que ça marche
+Les ressources `03-jwt-data.zip` ne sont pas une stack Docker. Pour l'intégration dans l'app d'authentification, repartir de la stack de la thématique [Authentification](02-authentification.md) et refaire son test (http://localhost:8083/user).

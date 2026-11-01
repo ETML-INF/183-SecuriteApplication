@@ -25,3 +25,12 @@ Permettent notamment de réaliser des opérations directes sur la base de donné
 - [Vues](../exercices/db-audit/e-183-ALL-Views.docx)
 - [Procédures stockées](../exercices/db-audit/e-183-ALL-StoredProcedure.docx)
 - [Ressources docker pour les vues et procédures stockées](../exercices/db-audit/docker-views-stored-procedure.zip)	
+
+## Vérifier que ça marche
+Après `docker compose up -d` dans le dossier `docker` (attendre ~20 s, MySQL initialise les scripts SQL) :
+
+| Quoi | URL | Résultat attendu |
+|---|---|---|
+| phpMyAdmin | http://localhost:8084 | page de connexion, base `db_students` visible avec ses tables |
+
+Si la base est vide : les scripts d'init ne s'exécutent qu'à la **première** création du volume. Refaire `docker compose down -v` puis `docker compose up -d`.

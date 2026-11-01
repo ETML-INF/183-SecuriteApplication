@@ -11,3 +11,12 @@ S = scripting
 
 # Pratique
 - [Recherche et livre d'or](../exercices/xss/e-183-ALL-XSS.docx)
+
+# Vérifier que ça marche
+| Exercice | Démarrage | URL | Résultat attendu |
+|---|---|---|---|
+| HTTP payload | `docker compose up -d` dans `docker-xss-http-payload` | http://localhost:8087/search-results?q=test | la page affiche le terme cherché "test" |
+| Stocké | `docker compose up -d` dans `docker-xss-stored` | http://localhost:8086 | page "livre d'or" avec formulaire de commentaire |
+| Stocké (base) | idem | http://localhost:8085 | phpMyAdmin |
+
+Ne lance qu'un exercice à la fois si un port est déjà occupé.

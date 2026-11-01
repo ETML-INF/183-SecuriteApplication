@@ -28,3 +28,14 @@ Les élément suivants vont donc être abordés:
 )
 - https://proton.me/fr/business/pass/breach-observatory
 - [JWT Handbook](../supports/02-jwt-handbook-v0_14_2.pdf)
+
+## Vérifier que ça marche
+Après `docker compose up -d` dans le dossier `nodejstoken` (attendre ~20 s que MySQL démarre) :
+
+| Quoi | URL / commande | Résultat attendu |
+|---|---|---|
+| phpMyAdmin | http://localhost:8082 | page de connexion (root / root) |
+| API | `curl -i http://localhost:8083/user` | HTTP 200 (texte "User: ...") |
+| Login | `curl -i -X POST http://localhost:8083/auth -H "Content-Type: application/json" -d "{\"username\":\"john\",\"password\":\"x\"}"` | HTTP 401 `{"error":"Invalid username or password"}` (une réponse JSON, pas de "connection refused") |
+
+Si rien ne répond : `docker compose ps` (3 conteneurs *running*), puis `docker compose logs app`.
