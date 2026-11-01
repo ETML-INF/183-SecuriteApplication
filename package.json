@@ -1,0 +1,15 @@
+{
+  "name": "183-securite-application-slides",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "php2shell": "slidev slides/08-php2shell.md --open",
+    "ia": "slidev slides/07-ia-securite.md --open"
+  },
+  "devDependencies": {
+    "@slidev/cli": "^52.0.0",
+    "@slidev/theme-default": "latest",
+    "markdown-it": "^14.3.3",
+    "playwright-chromium": "^1.50.0"
+  }
+}
