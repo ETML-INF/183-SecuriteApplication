@@ -18,8 +18,8 @@ aussi faire de la modification...
 Permettent notamment de réaliser des opérations directes sur la base de données en liens avec des ‘trigger’... Et peut aussi être utilisé pour implémenter de la logique métier indépendante du client...
 
 ## Théorie
-- [Marketplace](../supports/05-pitch-procedure-pm2etml.pptx)
-- [Vues et procédures stockées](../supports/05-db_audit.pptx)
+- Slides web : [Vues](https://etml-inf.github.io/183-SecuriteApplication/slides/05a-vues/), [Procédures stockées](https://etml-inf.github.io/183-SecuriteApplication/slides/05b-procedures/), [Marketplace et BAC](https://etml-inf.github.io/183-SecuriteApplication/slides/05c-marketplace-bac/)
+- Version PowerPoint : [Marketplace](../supports/05-pitch-procedure-pm2etml.pptx), [Vues et procédures stockées](../supports/05-db_audit.pptx)
 
 ## Pratique
 - [Vues](../exercices/db-audit/e-183-ALL-Views.docx)

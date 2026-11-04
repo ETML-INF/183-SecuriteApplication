@@ -12,7 +12,8 @@ Les élément suivants vont donc être abordés:
 - Stockage des mot de passe
 
 ## Théorie
-- [Authentification-theorie / slides 1..20](../supports/02-Auth.pptx)
+- [Slides mots de passe](https://etml-inf.github.io/183-SecuriteApplication/slides/02a-mot-de-passe/) (version web)
+- [Version PowerPoint](../supports/02-Auth.pptx) (slides 1..20)
 
 ## Pratique
 

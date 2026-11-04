@@ -3,7 +3,7 @@ Quoi de mieux pour s’entraîner que de se mettre dans la peau d’un hacker fa
 
 ## Juice shop
 
-1. [Intro Juiceshop](../supports/04-Juiceshop.pptx)
+1. [Intro Juiceshop (slides)](https://etml-inf.github.io/183-SecuriteApplication/slides/04-juiceshop/) ([version PowerPoint](../supports/04-Juiceshop.pptx))
 2. [JuiceShop | Guide pratique](../exercices/hack/JuiceShop.docx)
 
 

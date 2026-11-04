@@ -4,7 +4,10 @@ Ainsi une requête, au niveau HTTP, n’a pas de rapport avec une autre...
 Il faut donc utiliser un moyen annexe pour donner l’impression à l’utilisateur que son authentification est valide durant un certain temps...
 
 ## Théorie
-- [Authentification-theorie / slides 20+](../supports/02-Auth.pptx)
+- [Slides sessions](https://etml-inf.github.io/183-SecuriteApplication/slides/03a-sessions/) (version web)
+- [Slides JWT](https://etml-inf.github.io/183-SecuriteApplication/slides/03b-jwt/) (version web)
+- [Slides signature JWT](https://etml-inf.github.io/183-SecuriteApplication/slides/03c-jwt-signature/) (version web)
+- [Version PowerPoint](../supports/02-Auth.pptx) (slides 2..9, 20+)
 
 ## Pratique
 

@@ -16,7 +16,11 @@ const repoUrl = process.env.GITHUB_REPOSITORY
   : 'https://github.com/ETML-INF/183-SecuriteApplication'
 
 // Fichiers non-markdown (pdf, pptx, docx, zip...) référencés par les pages : copiés tels quels dans le site
-const staticDirs = ['supports', 'legal']
+const staticDirs = ['supports', 'legal', 'exercices']
+// Copiés tels quels : tout sauf les .md (pages VitePress), les backups `~` et le dump local exercices/hack/wip.
+// Les corrigés X-*.md sont aussi copiés (bruts), car le parcours renvoie les élèves vers eux.
+const isStatic = (f: string) =>
+  !f.endsWith('~') && !f.includes('/wip/') && (!f.endsWith('.md') || path.basename(f).startsWith('X-'))
 
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap(f => {
@@ -87,7 +91,7 @@ export default defineConfig({
 
   buildEnd: (siteConfig) => {
     for (const dir of staticDirs.filter(existsSync)) {
-      for (const f of walk(dir).filter(f => !f.endsWith('.md') && !f.endsWith('~'))) {
+      for (const f of walk(dir).filter(isStatic)) {
         const dest = path.join(siteConfig.outDir, f)
         mkdirSync(path.dirname(dest), { recursive: true })
         copyFileSync(f, dest)
