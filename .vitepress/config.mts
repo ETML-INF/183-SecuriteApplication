@@ -11,6 +11,10 @@ if (process.env.GITHUB_REPOSITORY) {
   }
 }
 
+// VitePress ne connaît pas ces extensions et ajouterait « .html » aux liens (02-Auth.docx -> 02-Auth.docx.html)
+// Côté build (markdown) via process.env ; côté navigateur (router) via .env (VITE_EXTRA_EXTENSIONS)
+process.env.VITE_EXTRA_EXTENSIONS ??= 'docx,pptx,xlsx,sql'
+
 const repoUrl = process.env.GITHUB_REPOSITORY
   ? `https://github.com/${process.env.GITHUB_REPOSITORY}`
   : 'https://github.com/ETML-INF/183-SecuriteApplication'
@@ -54,7 +58,26 @@ export default defineConfig({
   rewrites: { 'README.md': 'index.md' },
 
   // Les dumps HTML (ex. exercices/hack/wip) ne doivent pas être scannés par Vite en dev
-  vite: { optimizeDeps: { entries: ['!exercices/**', '!node_modules/**'] } },
+  vite: {
+    optimizeDeps: { entries: ['!exercices/**', '!node_modules/**'] },
+    plugins: [{
+      // En dev, sert les fichiers statiques (docx, zip, pdf...) que buildEnd ne copie qu'au build
+      name: 'serve-static-assets-dev',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          const url = decodeURIComponent((req.url ?? '').split('?')[0])
+          if (!url.startsWith(pkg.siteBase)) return next()
+          const rel = url.slice(pkg.siteBase.length)
+          if (!staticDirs.some(d => rel.startsWith(d + '/')) || rel.includes('..')) return next()
+          const f = path.resolve(rel)
+          if (!existsSync(f) || !statSync(f).isFile() || !isStatic(rel)) return next()
+          if (f.endsWith('.md')) res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+          else res.setHeader('Content-Disposition', 'inline')
+          res.end(readFileSync(f))
+        })
+      },
+    }],
+  },
 
   themeConfig: {
     nav: [
