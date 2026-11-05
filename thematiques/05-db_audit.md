@@ -24,7 +24,23 @@ Permettent notamment de réaliser des opérations directes sur la base de donné
 ## Pratique
 - [Vues](../exercices/db-audit/e-183-ALL-Views.docx)
 - [Procédures stockées](../exercices/db-audit/e-183-ALL-StoredProcedure.docx)
-- [Ressources docker pour les vues et procédures stockées](../exercices/db-audit/docker-views-stored-procedure.zip)	
+- [Ressources docker pour les vues et procédures stockées](../exercices/db-audit/docker-views-stored-procedure.zip)
+
+### Vues (45 min)
+Base `db_students`, console MySQL de phpMyAdmin. **Rendu** : répondre dans `e-183-ALL-Views.docx`.
+1. **Échauffement** : requêtes sur les étudiants, leurs cours, dates et notes.
+2. **`v_studentsGrades`** : nom, prénom, cours, date et note ; utilisateur `teacher` en lecture seule sur cette vue ; script appelé automatiquement par `docker-compose.yml`.
+3. **`v_studentsBadGrades`** : même vue avec note < 4.0 ; tester avec `teacher` (module 123).
+4. **`v_absentStudents`** : jours, périodes et motifs d'absence ; tester avec les absences de février 2024 (`MONTH()`, `YEAR()`).
+
+### Procédures stockées (2 x 45 min)
+**Rendu** : répondre dans `e-183-ALL-StoredProcedure.docx`.
+1. Paramètres **OUT** (`sp_helloWorld`), **IN** (`sp_helloWorld2`) et utilisateur courant `USER()` (`sp_helloWorld3`) ; question sur le délimiteur.
+2. **Audit** : table `t_audit_access_absences` et procédure `sp_get_absences` qui lit la vue des absences et journalise date et utilisateur.
+3. **Permissions** : compte `John` qui peut uniquement exécuter `sp_get_absences`.
+4. **Triggers** : journal textuel des opérations sur la table des absences, puis statistiques mensuelles par élève.
+
+Théorie liée : slides [Vues](https://etml-inf.github.io/183-SecuriteApplication/slides/05a-vues/) et [Procédures stockées](https://etml-inf.github.io/183-SecuriteApplication/slides/05b-procedures/). Solutions : `X-views_stored_procedures.md` et les scripts `X-*.sql` dans `exercices/db-audit/`.	
 
 ## Vérifier que ça marche
 Après `docker compose up -d` dans le dossier `docker` (attendre ~20 s, MySQL initialise les scripts SQL) :

@@ -23,6 +23,18 @@ Les élément suivants vont donc être abordés:
 - [Authentification-pratique](../exercices/auth/02-Auth.docx)
 - [Auth app - nodejstoken](../exercices/auth/02-nodejstoken.zip)
 
+**Durée** : 30 min. **Aides autorisées** : support de cours, notes personnelles, cheatsheets OWASP. **Rendu** : répondre directement dans `02-Auth.docx`.
+
+Étapes de l'exercice (chacune se termine par une *checklist* à valider) :
+1. **Mise en place** : extraire l'archive, `docker compose up -d`, faire un commit initial (`git init`), choisir un outil de requêtage (Bruno, Thunder, curl).
+2. **Schéma** : compléter le dessin des étapes qui permettent au serveur d'établir qu'un utilisateur est authentifié (mot de passe contrôlé, salé, haché, poivré).
+3. **Injection** : expliquer pourquoi le code est sensible à l'injection SQL et proposer un payload qui connecte l'utilisateur `tartampion`.
+4. **Protection contre l'injection** : corriger le code (sans changer la requête, puis en adaptant la requête). Le payload précédent ne doit plus fonctionner.
+5. **Accès à la base** : connexion avec un utilisateur à droits restreints (moindres privilèges) ; vérifier que `drop database` / `truncate table` ne passent pas via HTTP.
+6. **Protection des données** : hacher, saler et poivrer les mots de passe. Un export de la DB ne doit pas les révéler, ni `johnTheRipper` ni une rainbow table ne doivent aboutir.
+
+Théorie liée : [slides mots de passe](https://etml-inf.github.io/183-SecuriteApplication/slides/02a-mot-de-passe/) (activité 1). Solution : `02X-nodejstoken-auth_salt_jwt_cookie.zip` dans `exercices/auth/`.
+
 
 ## Ressources
 - [OWASP Password_Storage_Cheat_Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html

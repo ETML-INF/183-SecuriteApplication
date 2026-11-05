@@ -440,7 +440,7 @@ layout: section
 
 <v-clicks>
 
-- Un document synthétique basé sur le modèle *E-183-ALL-RisqueN.pptx*
+- Un document synthétique basé sur le modèle [P-183-ALL-RisqueN.pptx](https://etml-inf.github.io/183-SecuriteApplication/exercices/owasp/P-183-ALL-RisqueN.pptx)
 - Renommer le document (RisqueN remplacé par le nom du risque traité)
 - Présentation à laisser dans Teams
 - **Rendu** : présentation à la classe (5-7 min max par risque)

@@ -16,7 +16,14 @@ Il faut donc utiliser un moyen annexe pour donner l’impression à l’utilisat
 #### Répondre aux questions théoriques
 - JWT [pdf](../exercices/auth/03-jwt.pdf) | [docx](../exercices/auth/03-jwt.docx) | [Ressources](../exercices/auth/03-jwt-data.zip)
 
+**Durée** : 15 min. **Rendu** : répondre directement dans `03-jwt.docx`. Objectifs : décrire le contenu d'un JWT, expliquer deux types de jetons et les risques de sécurité liés aux jetons.
+1. Citer les **trois éléments** d'un JWT et leur utilité ([slides JWT](https://etml-inf.github.io/183-SecuriteApplication/slides/03b-jwt/)).
+2. Expliquer la différence entre **HS256 et RS256** ([slides signature](https://etml-inf.github.io/183-SecuriteApplication/slides/03c-jwt-signature/)).
+3. Expliquer comment un attaquant pourrait exploiter une **clé secrète ou privée perdue**.
+4. **Décoder** les jetons `jwt_User1.txt` et `jwt_User2.txt` (`base64 -di`, <https://jwt.io>, [JWT Handbook](../supports/02-jwt-handbook-v0_14_2.pdf)) : quelles informations, la signature est-elle valide, que s'est-il passé avec le jeton 2 ?
+
 #### Implémenter dans l’application
+Reprendre l'application de la thématique [Authentification](02-authentification.md) : générer le token après un login réussi, le renvoyer au client et exiger qu'il soit présenté à chaque requête (activité 2 des [slides signature](https://etml-inf.github.io/183-SecuriteApplication/slides/03c-jwt-signature/) : démarrer le serveur, tester les URLs avec un client HTTP, identifier les fichiers à modifier).
 - Intégrer JWT
     - [Documentation officielle pour express-jwt](https://www.npmjs.com/package/express-jwt) 
 	OU
