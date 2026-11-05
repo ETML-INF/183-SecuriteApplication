@@ -3,7 +3,7 @@ Quoi de mieux pour s’entraîner que de se mettre dans la peau d’un hacker fa
 
 ## Juice shop
 
-1. [Intro Juiceshop (slides)](https://etml-inf.github.io/183-SecuriteApplication/slides/04-juiceshop/) ([version PowerPoint](../supports/04-Juiceshop.pptx))
+1. [Intro Juiceshop (slides)](../slides/04-juiceshop/){target="_self"} ([version PowerPoint](../supports/04-Juiceshop.pptx))
 2. [JuiceShop | Guide pratique](../exercices/hack/JuiceShop.docx)
 
 **Durée** : 2-3 périodes. **Aides autorisées** : notes de cours, supports, Internet. **Rendu** : répondre directement dans `JuiceShop.docx`. Pour chaque challenge, indiquer la **catégorie du Top 10:2025**.

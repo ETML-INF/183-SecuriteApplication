@@ -18,7 +18,7 @@ aussi faire de la modification...
 Permettent notamment de réaliser des opérations directes sur la base de données en liens avec des ‘trigger’... Et peut aussi être utilisé pour implémenter de la logique métier indépendante du client...
 
 ## Théorie
-- Slides web : [Vues](https://etml-inf.github.io/183-SecuriteApplication/slides/05a-vues/), [Procédures stockées](https://etml-inf.github.io/183-SecuriteApplication/slides/05b-procedures/), [Marketplace et BAC](https://etml-inf.github.io/183-SecuriteApplication/slides/05c-marketplace-bac/)
+- Slides web : [Vues](../slides/05a-vues/){target="_self"}, [Procédures stockées](../slides/05b-procedures/){target="_self"}, [Marketplace et BAC](../slides/05c-marketplace-bac/){target="_self"}
 - Version PowerPoint : [Marketplace](../supports/05-pitch-procedure-pm2etml.pptx), [Vues et procédures stockées](../supports/05-db_audit.pptx)
 
 ## Pratique
@@ -40,7 +40,7 @@ Base `db_students`, console MySQL de phpMyAdmin. **Rendu** : répondre dans `e-1
 3. **Permissions** : compte `John` qui peut uniquement exécuter `sp_get_absences`.
 4. **Triggers** : journal textuel des opérations sur la table des absences, puis statistiques mensuelles par élève.
 
-Théorie liée : slides [Vues](https://etml-inf.github.io/183-SecuriteApplication/slides/05a-vues/) et [Procédures stockées](https://etml-inf.github.io/183-SecuriteApplication/slides/05b-procedures/). Solutions : `X-views_stored_procedures.md` et les scripts `X-*.sql` dans `exercices/db-audit/`.	
+Théorie liée : slides [Vues](../slides/05a-vues/){target="_self"} et [Procédures stockées](../slides/05b-procedures/){target="_self"}. Solutions : `X-views_stored_procedures.md` et les scripts `X-*.sql` dans `exercices/db-audit/`.	
 
 ## Vérifier que ça marche
 Après `docker compose up -d` dans le dossier `docker` (attendre ~20 s, MySQL initialise les scripts SQL) :

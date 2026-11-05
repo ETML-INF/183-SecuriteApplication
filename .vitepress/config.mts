@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { readdirSync, readFileSync, existsSync, mkdirSync, copyFileSync, statSync } from 'node:fs'
 import path from 'node:path'
+import { createServer as createNetServer } from 'node:net'
 import pkg from '../package.json'
 
 // Fail build when siteBase doesn't match the actual GitHub repo name (CI only)
@@ -44,7 +45,7 @@ const title = (f: string) => {
 }
 
 const slides = readdirSync('slides').filter(f => f.endsWith('.md')).sort()
-  .map(f => ({ text: path.basename(f, '.md'), link: `${pkg.siteBase}slides/${path.basename(f, '.md')}/`, target: '_blank' }))
+  .map(f => ({ text: path.basename(f, '.md'), link: `/slides/${path.basename(f, '.md')}/`, target: '_blank' })) // VPLink ajoute déjà `base` ; un target explicite évite le routeur (slides = hors SPA)
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -61,6 +62,42 @@ export default defineConfig({
   vite: {
     optimizeDeps: { entries: ['!exercices/**', '!node_modules/**'] },
     plugins: [{
+      // En dev, héberge chaque deck Slidev dans le process VitePress (API @slidev/cli, pas de process séparé).
+      // Le serveur Slidev d'un deck est créé au premier accès, puis réutilisé.
+      name: 'serve-slidev-dev',
+      configureServer(server) {
+        const servers = new Map<string, Promise<any>>()
+        const freePort = () => new Promise<number>((resolve, reject) => {
+          const s = createNetServer().once('error', reject).listen(0, () => {
+            const { port } = s.address() as { port: number }
+            s.close(() => resolve(port))
+          })
+        })
+        const start = async (name: string) => {
+          const { createServer, resolveOptions } = await import('@slidev/cli')
+          const base = `${pkg.siteBase}slides/${name}/`
+          const options = await resolveOptions({ entry: `slides/${name}.md`, base }, 'dev')
+          return createServer(options, {
+            base,
+            logLevel: 'warn',
+            server: { middlewareMode: true, hmr: { port: await freePort() } },
+          })
+        }
+        server.middlewares.use(async (req, res, next) => {
+          const m = (req.url ?? '').match(new RegExp(`^${pkg.siteBase}slides/([^/?]+)/`))
+          if (!m || !existsSync(`slides/${m[1]}.md`)) return next()
+          try {
+            if (!servers.has(m[1])) servers.set(m[1], start(m[1]))
+            const slidev = await servers.get(m[1])
+            slidev.middlewares(req, res, next)
+          } catch (e) {
+            servers.delete(m[1])
+            next(e)
+          }
+        })
+        server.httpServer?.on('close', () => servers.forEach(p => p.then(s => s.close())))
+      },
+    }, {
       // En dev, sert les fichiers statiques (docx, zip, pdf...) que buildEnd ne copie qu'au build
       name: 'serve-static-assets-dev',
       configureServer(server) {
