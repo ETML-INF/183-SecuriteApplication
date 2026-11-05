@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress'
-import { readdirSync, readFileSync, existsSync, mkdirSync, copyFileSync, statSync } from 'node:fs'
+import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import path from 'node:path'
-import { createServer as createNetServer } from 'node:net'
 import pkg from '../package.json'
+import { walk, copyStatic, devPlugins } from './etml-vitepress'
 
 // Fail build when siteBase doesn't match the actual GitHub repo name (CI only)
 if (process.env.GITHUB_REPOSITORY) {
@@ -27,12 +27,7 @@ const staticDirs = ['supports', 'legal', 'exercices']
 const isStatic = (f: string) =>
   !f.endsWith('~') && !f.includes('/wip/') && (!f.endsWith('.md') || path.basename(f).startsWith('X-'))
 
-function walk(dir: string): string[] {
-  return readdirSync(dir).flatMap(f => {
-    const p = `${dir}/${f}`
-    return statSync(p).isDirectory() ? walk(p) : [p]
-  })
-}
+const etml = { siteBase: pkg.siteBase, staticDirs, isStatic }
 
 const mdFiles = (dir: string) =>
   existsSync(dir) ? walk(dir).filter(f => f.endsWith('.md') && !path.basename(f).startsWith('X-')).sort() : []
@@ -61,59 +56,7 @@ export default defineConfig({
   // Les dumps HTML (ex. exercices/hack/wip) ne doivent pas être scannés par Vite en dev
   vite: {
     optimizeDeps: { entries: ['!exercices/**', '!node_modules/**'] },
-    plugins: [{
-      // En dev, héberge chaque deck Slidev dans le process VitePress (API @slidev/cli, pas de process séparé).
-      // Le serveur Slidev d'un deck est créé au premier accès, puis réutilisé.
-      name: 'serve-slidev-dev',
-      configureServer(server) {
-        const servers = new Map<string, Promise<any>>()
-        const freePort = () => new Promise<number>((resolve, reject) => {
-          const s = createNetServer().once('error', reject).listen(0, () => {
-            const { port } = s.address() as { port: number }
-            s.close(() => resolve(port))
-          })
-        })
-        const start = async (name: string) => {
-          const { createServer, resolveOptions } = await import('@slidev/cli')
-          const base = `${pkg.siteBase}slides/${name}/`
-          const options = await resolveOptions({ entry: `slides/${name}.md`, base }, 'dev')
-          return createServer(options, {
-            base,
-            logLevel: 'warn',
-            server: { middlewareMode: true, hmr: { port: await freePort() } },
-          })
-        }
-        server.middlewares.use(async (req, res, next) => {
-          const m = (req.url ?? '').match(new RegExp(`^${pkg.siteBase}slides/([^/?]+)/`))
-          if (!m || !existsSync(`slides/${m[1]}.md`)) return next()
-          try {
-            if (!servers.has(m[1])) servers.set(m[1], start(m[1]))
-            const slidev = await servers.get(m[1])
-            slidev.middlewares(req, res, next)
-          } catch (e) {
-            servers.delete(m[1])
-            next(e)
-          }
-        })
-        server.httpServer?.on('close', () => servers.forEach(p => p.then(s => s.close())))
-      },
-    }, {
-      // En dev, sert les fichiers statiques (docx, zip, pdf...) que buildEnd ne copie qu'au build
-      name: 'serve-static-assets-dev',
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          const url = decodeURIComponent((req.url ?? '').split('?')[0])
-          if (!url.startsWith(pkg.siteBase)) return next()
-          const rel = url.slice(pkg.siteBase.length)
-          if (!staticDirs.some(d => rel.startsWith(d + '/')) || rel.includes('..')) return next()
-          const f = path.resolve(rel)
-          if (!existsSync(f) || !statSync(f).isFile() || !isStatic(rel)) return next()
-          if (f.endsWith('.md')) res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-          else res.setHeader('Content-Disposition', 'inline')
-          res.end(readFileSync(f))
-        })
-      },
-    }],
+    plugins: devPlugins(etml),
   },
 
   themeConfig: {
@@ -149,13 +92,5 @@ export default defineConfig({
     /\.(pdf|xlsx|docx|csv|pptx|zip|sql|txt)$/i, // static assets copied in buildEnd
   ],
 
-  buildEnd: (siteConfig) => {
-    for (const dir of staticDirs.filter(existsSync)) {
-      for (const f of walk(dir).filter(isStatic)) {
-        const dest = path.join(siteConfig.outDir, f)
-        mkdirSync(path.dirname(dest), { recursive: true })
-        copyFileSync(f, dest)
-      }
-    }
-  },
+  buildEnd: (siteConfig) => copyStatic(siteConfig.outDir, etml),
 })
