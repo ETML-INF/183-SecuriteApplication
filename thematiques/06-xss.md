@@ -7,7 +7,7 @@ S = scripting
 
 # Théorie
 - [Intro Vidéo](https://eduvaud.sharepoint.com/:v:/r/sites/ETML_INF_MAITRES_Teams/Documents%20partages/General/Supports%20de%20cours/ICT/183-SecuriteApplication/b-UnitesEnseignement/XSS-video.mkv?csf=1&web=1&e=qRq50q)
-- [Slides XSS](../slides/06-xss/){target="_self"} (version web)
+- [Slides XSS](../slides/06-xss/){target="_blank"} (version web)
 - [Version PowerPoint](../supports/06-xss.pptx)
 
 # Pratique
@@ -20,7 +20,7 @@ S = scripting
 4. **Payload `<img src="x" onerror="alert('XSS')">`** : expliquer ce que l'attaquant cherche à provoquer et quel mécanisme il contourne.
 5. **Corriger** les deux éléments du livre d'or et résumer les points à retenir.
 
-Théorie liée : [slides XSS](../slides/06-xss/){target="_self"}. Solution : `exercices/xss/X-xss-solution.md`.
+Théorie liée : [slides XSS](../slides/06-xss/){target="_blank"}. Solution : `exercices/xss/X-xss-solution.md`.
 
 # Vérifier que ça marche
 | Exercice | Démarrage | URL | Résultat attendu |

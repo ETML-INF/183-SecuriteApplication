@@ -12,7 +12,7 @@ Les élément suivants vont donc être abordés:
 - Stockage des mot de passe
 
 ## Théorie
-- [Slides mots de passe](../slides/02a-mot-de-passe/){target="_self"} (version web)
+- [Slides mots de passe](../slides/02a-mot-de-passe/){target="_blank"} (version web)
 - [Version PowerPoint](../supports/02-Auth.pptx) (slides 1..20)
 
 ## Pratique
@@ -33,7 +33,7 @@ Les élément suivants vont donc être abordés:
 5. **Accès à la base** : connexion avec un utilisateur à droits restreints (moindres privilèges) ; vérifier que `drop database` / `truncate table` ne passent pas via HTTP.
 6. **Protection des données** : hacher, saler et poivrer les mots de passe. Un export de la DB ne doit pas les révéler, ni `johnTheRipper` ni une rainbow table ne doivent aboutir.
 
-Théorie liée : [slides mots de passe](../slides/02a-mot-de-passe/){target="_self"} (activité 1). Solution : `02X-nodejstoken-auth_salt_jwt_cookie.zip` dans `exercices/auth/`.
+Théorie liée : [slides mots de passe](../slides/02a-mot-de-passe/){target="_blank"} (activité 1). Solution : `02X-nodejstoken-auth_salt_jwt_cookie.zip` dans `exercices/auth/`.
 
 
 ## Ressources
