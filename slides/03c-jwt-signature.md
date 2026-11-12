@@ -148,7 +148,7 @@ class: text-center
 
 <div class="mt-8 text-gray-500">
 
-Énoncé : *E-183-ALL-JWT-TOKEN-Pratique.docx*
+Intégrer JWT dans l'application **auth** (page thématique *Sessions*, section *Implémenter dans l'application*)
 
 </div>
 

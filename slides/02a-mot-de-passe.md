@@ -203,6 +203,6 @@ class: text-center
 
 <div class="mt-8 text-gray-500">
 
-Débuter le projet **nodejstoken** avec la première partie de l'énoncé *02-Auth.docx*
+Débuter le projet **auth** avec la première partie de l'énoncé *02-Auth.docx*
 
 </div>

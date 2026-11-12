@@ -37,7 +37,7 @@ Ground rules (apply to every task)
 | T10 | Review `supports/01-superman.pptx` story order vs Top10:2025 | done (slides reordered A01..A10, notes renamed; open points below) |
 
 ## T1 Docker stacks (exercices/**.zip)
-Zips: `auth/02-nodejstoken.zip`, `auth/02X-nodejstoken-auth_salt_jwt_cookie.zip`,
+Zips: `auth/02-auth.zip`, `auth/02X-auth-solution.zip`, `auth/03X-token-solution.zip`,
 `db-audit/docker-views-stored-procedure.zip`, `xss/docker-xss-http-payload.zip`,
 `xss/docker-xss-stored.zip`. Unzip each into the scratchpad, never in the repo.
 Known issues:
@@ -58,6 +58,64 @@ SQLi login on 02, register/login/cookie on 02X, comment POST/GET on xss-stored).
 - EXPOSE fixed (8087 http-payload, 8086 stored). Comments added in 02 `Auth.mjs` (intentional SQLi) and `dbUtils.mjs` (root/root).
 - 02X labelled SOLUTION in its compose header (solutions stay public in the repo, by choice). Views data kept at 2024 (works, dates are only data).
 - Not done: the docx may mention the old 02X ports (not found by text search, check screenshots).
+Update (2026-11-12): auth solutions rewritten on top of the 02 starter (ESM, JSON API, same files, `SOLUTION étape N`
+comments) so students can diff file by file; the old EJS/CommonJS 02X (and its "cookie on 02X") is gone.
+- `02X-auth-solution.zip` -> folder `auth-solution/`, project `auth-solution`, ports 8088/8089: validation + prepared
+  statement, `app_user` (SELECT, INSERT on t_users), scrypt(HMAC-SHA256(pepper, pwd), salt), `/auth/register`.
+- `03X-token-solution.zip` -> folder `token-solution/`, project `token-solution`, ports 8090/8091: 02X + JWT HS256
+  (`algorithms` pinned, 1 h) in httpOnly/SameSite cookie, `requireAuth` on `/user`, `/auth/logout`.
+- Distinct folders and compose project names: unzipping a solution no longer overwrites the student's `auth/`, and
+  volumes are not shared (before: same `auth_dbdata`, init script skipped, "access denied for app_user").
+- Starter hint fixed (SQL TODO said sha256; now slow hash, scrypt/Argon2id, as in the slides).
+- DB in all three auth stacks: `tmpfs` by default (re-initialised from `db_authentication.sql` at every db start,
+  `docker compose restart db` applies SQL edits, API data lost). Opt-in persistence: rename
+  `docker-compose.persist.yml` -> `docker-compose.override.yml` (auto-loaded; uses `tmpfs: !reset []`, needs
+  Compose >= 2.24). Warned in each zip's `README.md`, compose comments, theme 02/03 pages, indices.
+- db healthcheck (`mysqladmin ping -h 127.0.0.1`, TCP so not "healthy" during init) + `depends_on: service_healthy`
+  for nodejs and phpMyAdmin: `up -d` returns when MySQL is ready, no more first-request 500.
+- npm deps: the anonymous `node_modules` volume hid packages added later (`up --build` without `-V` ->
+  ERR_MODULE_NOT_FOUND, verified). Now `app/nodemon.json` watches `*.json` too and runs
+  `npm install && node server.mjs` on every (re)start: adding a package from the host (`npm install x` in app/),
+  in the container (`compose exec`) or by hand is picked up in ~4 s, no docker command, no `-V`.
+  No-op install ~0.9 s per code-change restart. A preinstall warning was rejected: npm does not run root
+  lifecycle scripts for `npm install <pkg>`. Host node_modules stays masked (Linux native builds in the container).
+- `.dockerignore` (`**/node_modules`) added: without it, `COPY app/ ./` baked the host node_modules into the image
+  (seeds the anon volume). Verified: a same-version host module (= Windows native build) broke the app; with
+  `.dockerignore` the container keeps its own Linux build. A local `npm install` can no longer break the container.
+- Local run option (auth stacks): DB published on 127.0.0.1 (6031 / 6033 / 6034), `DB_HOST`, `DB_PORT`, `PORT` read
+  from env (defaults = Docker), `app/.env` holds the local values commented out, loaded with
+  `node --env-file-if-exists=.env` (Node >= 22.9). Compose sets DB_HOST/DB_PORT/PORT itself, so an uncommented
+  `app/.env` does not affect the container (verified). Use 127.0.0.1, not localhost (Node on Windows tries ::1 first).
+  Verified with Windows Node 24: starter SQLi and 03X JWT flow against the Docker DB.
+- All published ports bound to 127.0.0.1 (auth stacks and 05): vulnerable app and root/root DB not reachable from LAN.
+- Stack 05 (`docker-views-stored-procedure.zip`): folder `docker/` -> `docker-views-stored-procedure/` (same convention
+  as xss zips). SQL scripts moved to `sql/`. Only `1_` is mounted ON PURPOSE: mounting 2_/3_ is a student task
+  (Views docx: "Modifiez le fichier docker-compose.yml pour que le script 2_create_views.sql soit automatiquement
+  appelé"); a `TODO` marks the spot, hint 05.3 points to the existing 1_ mount. 2_/3_ now have a header and
+  `USE db_students;` (init scripts run without a default DB: `No database selected` otherwise, the X- solution's
+  unprefixed CREATE VIEW would fail). Persistent volume kept as default (students work in the phpMyAdmin console;
+  tmpfs would lose it), reset = `down -v`. Healthcheck + depends_on added. README added. Verified: console work
+  survives restart, scripts replay only after reset, DELIMITER procedure + GRANT on view work, a broken script gives
+  `dependency failed ... unhealthy` then a half-initialised "healthy" DB -> README/theme say: fix, then reset.
+- Smoke-tested all three side by side: SQLi works on 02 and fails on 02X, app_user DROP/TRUNCATE denied,
+  register 201/409, 03X 401 without token, 200 with cookie, forged/`alg:none` token 401, logout.
+Update 2 (2026-11-12), after review:
+- 02X/03X hashing switched to Argon2id (`argon2` ^0.45.1, prebuilt binaries, no compile): OWASP minimum
+  m=19456 KiB, t=2, p=1, pepper = Argon2 `secret` option. `useSalt` column KEPT (matches the docx diagram and the
+  scrypt variant): the app generates the salt (`generateSalt`) and passes it as Argon2's `salt` option (Argon2 also
+  copies it into the PHC string). `usePassword` widened to varchar(255). `hashPasswordScrypt(password, salt)` kept as
+  the no-dependency variant (N=2^17, r=8, p=1, HMAC pepper, 128 hex chars); `verifyPassword(password, salt, stored)`
+  picks the algorithm from the `$argon2` prefix, so both can coexist (= migration pattern). Signatures unchanged vs
+  the scrypt version. `john` keeps his salt, hash recomputed with the compose PEPPER (wrong pepper -> false, verified).
+  Grading: a student solution without salt column (Argon2 drawing its own salt) is also correct.
+- Starter TODOs (SQL, `Auth.mjs`, `generateSalt.mjs`) and hint 02.4 now Argon2id first, scrypt as alternative.
+  New hint: how to get `john`'s hash into the SQL (register route or temporary console.log) + "changing PEPPER
+  invalidates every hash".
+- Starter closes its DB connection on `finish` (was one leaked connection per request; also removes noise from the
+  02 -> 02X diff). Starter `.env` normalised (`COMPOSE_PROJECT_NAME=auth`).
+- READMEs: service table no longer split by a blank line; local run needs Node >= 22.9 (`--env-file-if-exists`).
+- `e-183-ALL-Views.docx` patched (run-level XML edits, formatting kept): source archive name, step 2 asks to mount
+  both `2_` and `3_`, `2_`/`3_` prefixes and `.sql` everywhere, "qui puisse aussi consulter".
 Acceptance (original): each stack runs from `docker compose up -d` on a clean machine and each docx
 exercise can be followed start to finish. Re-zip into the same filenames and commit.
 

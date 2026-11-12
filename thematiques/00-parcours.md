@@ -25,7 +25,7 @@ Les exercices ne sont pas notés individuellement : ils te préparent aux deux t
 1. Relis le support de la thématique (section *Théorie*).
 2. Regarde la section **Vérifier que ça marche** de la page de la thématique : si l'URL de test ne répond pas, le problème est dans Docker, pas dans ton code.
 3. Consulte les [indices](../exercices/indices.md) (ils ne donnent pas la réponse, seulement la direction).
-4. Après avoir essayé, compare avec la solution : elle se trouve dans le dossier de l'exercice (`exercices/…`), dans un fichier qui commence par `X-` ou dans l'archive `02X-…`.
+4. Après avoir essayé, compare avec la solution : elle se trouve dans le dossier de l'exercice (`exercices/…`), dans un fichier qui commence par `X-` ou dans les archives `02X-…` et `03X-…`.
 5. Demande à l'enseignant.
 
 ## Prérequis techniques

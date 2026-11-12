@@ -38,7 +38,29 @@ Pour s’aider on peut utiliser:
 - le storage local
 - un cookie
 
-D’ailleurs, express-jwt se base sur l’enête...
+D’ailleurs, express-jwt se base sur l’entête...
+
+D'autres pistes dans les [indices](../exercices/indices.md) (section *03 JWT, implémentation*).
+
+##### Point de départ et solution
+- **Point de départ** : application de la thématique 02. Si elle n'est pas terminée, partir de [`02X-auth-solution.zip`](../exercices/auth/02X-auth-solution.zip) (requête préparée, hachage salé/poivré, DB à droits restreints).
+- **Solution** (après avoir essayé) : [`03X-token-solution.zip`](../exercices/auth/03X-token-solution.zip) = 02X + JWT dans un cookie `httpOnly`. Seuls `server.mjs`, `routes/Auth.mjs`, `controllers/UserController.mjs`, `package.json` changent, plus deux nouveaux fichiers `utils/jwt.mjs` et `middleware/requireAuth.mjs` ; à la racine, `docker-compose.yml` (clé `JWT_SECRET`, ports), et les ports dans `README.md`, `.env` et `app/.env`.
+
+*Comme en thématique 02, la base est **réinitialisée à chaque démarrage** (utilisateurs inscrits perdus, `john` / `1234` toujours là) ; pour la garder, voir le `README.md` de l'archive.*
 
 ## Vérifier que ça marche
-Les ressources `03-jwt-data.zip` ne sont pas une stack Docker. Pour l'intégration dans l'app d'authentification, repartir de la stack de la thématique [Authentification](02-authentification.md) et refaire son test (http://localhost:8083/user).
+Les ressources `03-jwt-data.zip` ne sont pas une stack Docker (seulement les jetons à décoder).
+
+Pour l'intégration dans l'application, le test change : `/user` doit maintenant **refuser** une requête sans jeton.
+
+Exemple (adapter le port 8091 si nécessaire, probablement 8083):
+
+| Quoi          | Commande                                                                                                                                           | Résultat attendu                                                          |
+|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Sans jeton    | `curl -i http://localhost:8091/user`                                                                                                               | HTTP 401                                                                  |
+| Login         | `curl -i -c cookies.txt -X POST http://localhost:8091/auth -H "Content-Type: application/json" -d "{\"username\":\"john\",\"password\":\"1234\"}"` | HTTP 200 et entête `Set-Cookie: authToken=...; HttpOnly; SameSite=Strict` |
+| Avec jeton    | `curl -i -b cookies.txt http://localhost:8091/user`                                                                                                | HTTP 200 `User: john`                                                     |
+| Jeton modifié | coller le jeton dans <https://jwt.io>, changer `sub`, le renvoyer (`-b "authToken=..."`)                                                           | HTTP 401 (signature invalide)                                             |
+| Déconnexion   | `curl -i -b cookies.txt -c cookies.txt -X POST http://localhost:8091/auth/logout` puis refaire *Avec jeton*                                        | HTTP 401                                                                  |
+
+Dans Bruno / Thunder, le cookie est conservé automatiquement après le login (sinon, copier la valeur de `Set-Cookie`).
