@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Consolas, 'Courier New', monospace">
+  <rect width="800" height="500" fill="#2b3a55"/>
+  <rect x="50" y="30" width="700" height="360" rx="14" fill="#0d1117" stroke="#111" stroke-width="8"/>
+  <rect x="50" y="30" width="700" height="40" rx="10" fill="#4a5568"/>
+  <text x="400" y="58" font-size="22" font-weight="bold" text-anchor="middle" fill="#fff">ROBOT-07 · MAINTENANCE CONSOLE</text>
+  <text x="80" y="110" font-size="22" fill="#a0aec0">Code : ****  <tspan fill="#48bb78" font-weight="bold">1234 ✔ accès autorisé</tspan></text>
+  <text x="80" y="155" font-size="20" fill="#a0aec0">Visiteur :</text>
+  <rect x="190" y="132" width="540" height="34" rx="4" fill="#1a202c" stroke="#ecc94b" stroke-width="2"/>
+  <text x="200" y="157" font-size="20" font-weight="bold" fill="#ecc94b">x' OR 1=1 ; UPDATE alarm SET on=0 ; --</text>
+  <text x="80" y="215" font-size="17" fill="#718096">SELECT door FROM permissions</text>
+  <text x="80" y="240" font-size="17" fill="#718096">WHERE visitor = '<tspan fill="#ecc94b" font-weight="bold">x' OR 1=1 ; UPDATE alarm SET on=0 ; --</tspan>'</text>
+  <text x="80" y="295" font-size="24" font-weight="bold" fill="#48bb78">→ COULOIRS ET SAS : OUVERTS</text>
+  <text x="80" y="335" font-size="24" font-weight="bold" fill="#e53e3e">→ ALARME : OFF</text>
+  <!-- hero -->
+  <circle cx="110" cy="440" r="0" fill="none"/>
+  <path d="M60 400 h120 v70 h-120z" fill="#3182ce" stroke="#111" stroke-width="4"/>
+  <path d="M60 400 L30 490 L75 470z" fill="#e53e3e" stroke="#111" stroke-width="4"/>
+  <text x="200" y="450" font-size="22" fill="#fff" font-family="Arial, sans-serif">Un champ texte non filtré = du SQL exécuté</text>
+</svg>
