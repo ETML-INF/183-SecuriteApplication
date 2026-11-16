@@ -29,6 +29,7 @@ mdc: true
 - **Connaître** les dangers liés à la gestion de mot de passe
 - **Décrire** le contenu d'un token JWT
 - **Valider** un token JWT à l'aide de jwt.io
+- **Distinguer** un jeton signé (JWS) d'un jeton chiffré (JWE)
 
 </v-clicks>
 

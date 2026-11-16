@@ -21,6 +21,7 @@ Il faut donc utiliser un moyen annexe pour donner l’impression à l’utilisat
 2. Expliquer la différence entre **HS256 et RS256** ([slides signature](../slides/03c-jwt-signature/){target="_blank"}).
 3. Expliquer comment un attaquant pourrait exploiter une **clé secrète ou privée perdue**.
 4. **Décoder** les jetons `jwt_User1.txt` et `jwt_User2.txt` (`base64 -di`, <https://jwt.io>, [JWT Handbook](../supports/02-jwt-handbook-v0_14_2.pdf)) : quelles informations, la signature est-elle valide, que s'est-il passé avec le jeton 2 ?
+5. **Signé vs chiffré** : un JWT est-il confidentiel ? Quelle différence entre **JWS** et **JWE** (nombre de parties, ce que chacun protège) ? Citer un cas où chiffrer est justifié, et une alternative qui évite d'avoir à le faire.
 
 #### Implémenter dans l’application
 Reprendre l'application de la thématique [Authentification](02-authentification.md) : générer le token après un login réussi, le renvoyer au client et exiger qu'il soit présenté à chaque requête (activité 2 des [slides signature](../slides/03c-jwt-signature/){target="_blank"} : démarrer le serveur, tester les URLs avec un client HTTP, identifier les fichiers à modifier).
